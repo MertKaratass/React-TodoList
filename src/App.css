@@ -149,7 +149,6 @@ select {
   font-weight: bold;
   width: 25rem;
   text-align: center;
-  display: none;
 }
 
 .alert-warning {

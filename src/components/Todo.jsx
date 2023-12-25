@@ -8,14 +8,14 @@ function Todo({ text, todos, setTodos, todo }) {
     setTodos(
       todos.map((item) => {
         if (item.id === todo.id) {
-          return { ...item, comleted: !item.comleted };
+          return { ...item, completed: !item.completed };
         }
         return item;
       })
     );
   };
   return (
-    <div className={`todo ${todo.comleted ? "completed" : ""}`}>
+    <div className={`todo ${todo.completed ? "completed" : ""}`}>
       <button className="complete-btn" onClick={completedHandler}>
         <i className="fas fa-check-circle"></i>
       </button>

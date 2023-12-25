@@ -6,10 +6,17 @@ import TodoList from "./components/TodoList";
 function App() {
   const [inputText, setInputText] = useState("");
   const [todos, setTodos] = useState([]);
-  const [status, setstatus] = useState("all");
+  const [status, setStatus] = useState("all");
   const [filteredTodos, setfilteredTodos] = useState([]);
 
+  useEffect(() => {
+    getLocalTodos();
+  }, []);
 
+  useEffect(() => {
+    filterHandler(todos);
+    saveLocalTodos();
+  }, [todos, status]); // eslint-disable-line
 
   const filterHandler = () => {
     switch (status) {
@@ -21,9 +28,22 @@ function App() {
         break;
       default:
         setfilteredTodos(todos);
-        break;
     }
   };
+
+  //!save to local
+  const saveLocalTodos = () => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  };
+
+  const getLocalTodos = () => {
+    if (localStorage.getItem("todos") === null) {
+      localStorage.setItem("todos", JSON.stringify([]));
+    } else {
+      setTodos(JSON.parse(localStorage.getItem("todos")));
+    }
+  };
+
   return (
     <div className="App">
       <header>
@@ -34,9 +54,13 @@ function App() {
         setInputText={setInputText}
         todos={todos}
         setTodos={setTodos}
-        setstatus={setstatus}
+        setStatus={setStatus}
       />
-      <TodoList todos={todos} setTodos={setTodos} />
+      <TodoList
+        todos={todos}
+        setTodos={setTodos}
+        filteredTodos={filteredTodos}
+      />
     </div>
   );
 }

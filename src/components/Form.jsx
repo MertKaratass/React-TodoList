@@ -1,20 +1,39 @@
 import React from "react";
+import { useState } from "react";
 
 function Form({ inputText, setInputText, todos, setTodos, setStatus }) {
+  const [alertWarning, setAlertWarning] = useState(false);
+  const [alertSuccess, setAlertsuccess] = useState(false);
+
   const inputTextHandler = (e) => {
     setInputText(e.target.value);
   };
 
   const submitTodoHandle = (e) => {
     e.preventDefault();
-    setTodos([
-      ...todos,
-      { text: inputText, completed: false, id: Math.random() },
-    ]);
+    const isEmpty = (str) => !str.trim().length;
+    if (isEmpty(inputText)) {
+      setAlertWarning(true);
+      setTimeout(() => {
+        setAlertWarning(false);
+      }, 1000);
+    } else {
+      setAlertsuccess(true);
+      setTimeout(() => {
+        setAlertsuccess(false);
+      }, 1000);
+      setTodos([
+        ...todos,
+        { text: inputText, completed: false, id: Math.random() },
+      ]);
+    }
 
     setInputText("");
   };
-  
+
+  const statusHandler = (e) => {
+    setStatus(e.target.value);
+  };
 
   return (
     <form>
@@ -36,15 +55,28 @@ function Form({ inputText, setInputText, todos, setTodos, setStatus }) {
       </div>
 
       <div className="select">
-        <select
-          name="todos"
-          className="filter-todo"
-          onChange={inputTextHandler}
-        >
+        <select name="todos" className="filter-todo" onChange={statusHandler}>
           <option value="all">All</option>
           <option value="completed">Completed</option>
           <option value="uncompleted">Uncompleted</option>
         </select>
+      </div>
+
+      <div className="alert-wrapper">
+        {alertWarning ? (
+          <div className="alert-warning">
+            <div>Input alanıu boş bırakılamaz</div>
+          </div>
+        ) : (
+          ""
+        )}
+        {alertSuccess ? (
+          <div className="alert-success">
+            <div>Ekleme Başarılı</div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </form>
   );
